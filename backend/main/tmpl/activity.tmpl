@@ -1,0 +1,142 @@
+<html>
+    <head>
+        <title>activity manage</title>
+        <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    </head>
+    <body>
+        <div id="app-1">
+            <div>
+                <p style="background-color: darkslategray;color: white">新增一个活动</p>
+                <div>
+                    名称：<input type="text" v-model="actv.name"/>&nbsp;
+                    口令：<input type="text" v-model="actv.command"/>&nbsp;
+                    活动类型：
+                    <select v-model="actv.activityType">
+                        <option value="0">一次性活动</option>
+                        <option value="1">每日活动</option>
+                    </select>&nbsp;
+                    社群：
+                    <select v-model="actv.roomId">
+                        <option v-for="it in rooms" v-bind:value="it.id" v-text="it.weName"></option>
+                    </select>&nbsp;
+                    <br/>
+                    参与人数：<input type="text" v-model="actv.capacity"/>&nbsp;
+                    奖励币种：
+                    <select v-model="actv.coinType">
+                        <option value="积分">积分</option>
+                        <option value="BTC">BTC</option>
+                        <option value="ETH">ETH</option>
+                        <option value="USDT">USDT</option>
+                    </select>&nbsp;
+                    币数：<input type="text" v-model="actv.coinSum"/>&nbsp;
+                    分配方式：
+                    <select v-model="actv.rewardType">
+                        <option value="0">随机</option>
+                        <option value="1">平均</option>
+                    </select>&nbsp;
+                    <br/>
+                    积分门槛：<input type="text" v-model="actv.integralRequire"/>&nbsp;
+                    消耗积分：<input type="text" v-model="actv.integralCost"/>&nbsp;
+                    超时时间(秒)：<input type="text" v-model="actv.deadtime"/>&nbsp;
+                    <br/>
+                    通知内容：<textarea rows="3" style="width: 300px;" v-model="actv.content"></textarea>&nbsp;
+                    <button type="submit" v-on:click="save">保存</button>
+                </div>
+            </div>
+            <div>
+                <p style="background-color: darkslategray;color: white">活动列表</p>
+                <table border="1" cellpadding="0" cellspacing="0">
+                    <thead style="background-color: silver">
+                    <tr>
+                        <th>id</th><th>名称</th><th>活动类型</th><th>社群</th><th>人数</th><th>已参与</th><th>币种</th>
+                        <th>币数</th><th>剩余</th><th>分配方式</th><th>门槛</th><th>消耗</th><th>口令</th><th>超时</th>
+                        <th>结束时间</th><th>创建人</th><th>创建时间</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="v in list">
+                            <td v-text="v.id"></td>
+                            <td v-text="v.name"></td>
+                            <td v-text="v.activityType"></td>
+                            <td v-text="v.roomId"></td>
+                            <td v-text="v.capacity"></td>
+                            <td v-text="v.joined"></td>
+                            <td v-text="v.coinType"></td>
+                            <td v-text="v.coinSum"></td>
+                            <td v-text="v.coinRest"></td>
+                            <td v-text="v.rewardType"></td>
+                            <td v-text="v.integralRequire"></td>
+                            <td v-text="v.integralCost"></td>
+                            <td v-text="v.command"></td>
+                            <td v-text="v.deadtime"></td>
+                            <td v-text="v.doneTime"></td>
+                            <td v-text="v.createBy"></td>
+                            <td v-text="v.createTime"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    <script>
+        var app=new Vue({
+            el:"#app-1",
+            data:{
+                list:[],
+                rooms:[],
+                done:0,
+                actv:{
+                    name:"", content:"", activityType:0, roomId:1, capacity:0, coinType:"积分", coinSum:0,
+                    rewardType:0, integralRequire:0, integralCost:0, command:"", deadtime:120
+                }
+            },
+            methods:{
+                getList:function () {
+                    let app=this;
+                    axios.get("/b/actv?done="+this.done).then(function (resp) {
+                        if (!resp.data){
+                            return
+                        }
+                        app.list=resp.data
+                    })
+                },
+                save:function () {
+                    let app=this;
+                    let v=this.actv;
+                    v.activityType=parseInt(v.activityType);
+                    v.coinSum=parseInt(v.coinSum);
+                    v.deadtime=parseInt(v.deadtime)
+                    v.integralCost=parseInt(v.integralCost)
+                    v.integralRequire=parseInt(v.integralRequire)
+                    v.rewardType=parseInt(v.rewardType)
+                    v.roomId=parseInt(v.roomId)
+                    v.capacity=parseInt(v.capacity)
+                    console.log(v)
+                    axios.post("/b/actv",v).then(function (resp) {
+                        if (resp.data){
+                            alert(resp.data)
+                            app.actv={
+                                name:"", content:"", activityType:0, roomId:1, capacity:0, coinType:"积分", coinSum:0,
+                                rewardType:0, integralRequire:0, integralCost:0, command:"", deadtime:120
+                            }
+                            app.getList()
+                        }
+                    })
+                }
+            },
+            mounted:function () {
+                let app=this
+                axios.get("/b/room").then(function (resp) {
+                    resp=resp.data
+                    if (resp.data){
+                        let rooms=resp.data
+                        rooms.unshift({id:0,weName:"---私聊方式---"})
+                        app.rooms=rooms
+                    }
+                })
+                this.getList()
+            }
+        })
+    </script>
+    </body>
+</html>

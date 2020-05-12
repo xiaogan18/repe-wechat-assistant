@@ -1,0 +1,59 @@
+Database:
+  DriverName: "mysql"
+  DataSource: "root:xiaogan_123@tcp(129.204.21.76:3306)/repe?parseTime=true&collation=utf8_unicode_ci&charset=utf8mb4"
+System:
+  WebListen: ":80" #web api监听端口
+  BotListen: ":89" #机器人api监听端口(注意此端口只可配置内网访问）
+CommandConfig: #文本占位符%v代表某些字段，不可更改顺序；\n代表换行
+  MessageTemplate: "%v\n--------------------------------\ncopyright©repe.com" #机器人消息母版【占位符：1.消息文本】
+  ErrorInvalidArgs: "格式不正确哦，参考%v" #口令格式错误时提示信息【占位符：1.口令提示】
+  ErrorPrivateCommand: "请私聊小助手发送口令" #口令是私聊时提醒
+  Activity: #活动配置
+    EverydayReopenHour: 0 #每日活动刷新时间点（小时）
+    EverydayReopenMinute: 0 #（分钟）
+    TextNew: "%v\n奖励:%v%v 可参与人数:%v" #新活动开展文本【占位符：1.活动文本 2.币数 3.币种 4.可参与人数】
+    TextClose: "%v已结束，奖励情况：%v" #活动结束时文本【占位符：1.活动名称 2.奖励情况】
+    TextJoin: "%v成功，获得%v %v" #参加获得成功文本【占位符：1.活动名称 2.奖励数 3.币种】
+    TextCoinReturn: "%v %v 已返还至账户" #剩余量返还【占位符：1.剩余数 2.币种】
+
+#---静态口令配置
+  RedPacket: #发红包口令
+    Command: "发红包" #触发口令
+    Description: "(正确格式：发红包 币数 币种 红包数)" #提示描述
+    Reply: "发红包啦，回复【抢红包】即可参与" #成功后机器人回复
+    DefaultCommand: "抢红包" #参与口令
+    DefaultDeadTime: 3600 #自动结束时间（秒）
+    InsufficientErr: "余额不足" #余额不足时提示
+  CmdRedPacket: #口令红包
+    Command: "口令红包"
+    Description: "(正确格式：口令红包 口令 币数 币种 红包数)"
+    Reply: "发口令红包啦，回复【%v】即可参与" #【占位符：1.定义的口令】
+  GiveReward:
+    Command: "打赏"
+    Description: "(正确格式：打赏 币数 币种 @用户1@用户2...)"
+    Reply: "打赏成功，谢谢土豪O(∩_∩)O"
+  CoinPrice: #行情口令
+    Command: "行情"
+    Description: "(正确格式：行情 币种)"
+    Reply: "%v当前价格:%v %v\n行情由%v提供" #【占位符：1.币种 2.币价 3.单位 4.行情源】
+    SearchErr: "查询行情失败:%v" #查询失败回复文本【占位符：1.错误信息】
+  Topup: #充值口令
+    Command: "充值"
+    Description: "从交易所账户充值到repe账户"
+    Reply: "充值链接10分钟内有效 http://129.204.21.76/repe/#/topup/%v" #【占位符：1.用户唯一码】
+  Withdraw: #提现口令
+    Command: "提现"
+    Description: "从repe账户提现到交易所账户"
+    Reply: "提现链接10分钟内有效 http://129.204.21.76/repe/#/withdraw/%v" #【占位符：1.用户唯一码】
+  Account: #账户口令
+    Command: "账户"
+    Description: "修改或查看自己的账户信息"
+    Reply: "账户信息链接10分钟内有效 http://129.204.21.76/repe/#/account/%v" #【占位符：1.用户唯一码】
+  Balance: #余额口令
+    Command: "余额"
+    Description: "查询个人repe账户余额"
+    Reply: "称号：%v 积分：%v%v" #【占位符：1.称号 2.积分 3.持币情况】
+  Help: #帮助口令
+    Command: "帮助"
+    Description: ""
+    Reply: "欢迎使用repe社区管理助手，你可以使用如下口令来和我聊天哦%v" #【占位符：1.口令列表】

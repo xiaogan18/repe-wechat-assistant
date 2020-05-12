@@ -1,0 +1,91 @@
+<html>
+    <head>
+        <title>repe example test</title>
+        <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    </head>
+    <body>
+    <div id="app-1">
+        <div style="background-color: cadetblue;font-size: x-large;color: white;text-align: center;">
+            【{{.Room.WeName}}】Let's Chat With Simulation
+        </div>
+        <div>
+            <textarea ref="textarea" style="width: 100%;height: 500px;" readonly="readonly" v-text="message"></textarea>
+        </div>
+        <div>
+            <p style="background-color: gray;margin-bottom: 0;">在这里输入你要说的话</p>
+            <textarea style="width: 100%;height: 60px;margin: 0;" rows="4" v-model="write"></textarea>
+            <button style="width: 80px;height: 60px;" type="submit" v-on:click="send">发送</button>
+        </div>
+    </div>
+        <script>
+            var app=new Vue({
+                el:'#app-1',
+                data:{
+                    user:"",
+                    room:"",
+                    message:"",
+                    write:"",
+                    timer:''
+                },
+                methods:{
+                    send:function () {
+                        if (!this.write){
+                            return
+                        }
+                        let app=this
+                        axios.post("/bot/cmd",{
+                            user:this.user,
+                            room:this.room,
+                            content:this.write,
+                        }).then(function (resp) {
+                            console.log(resp)
+                            app.message+="【me】:\n"+app.write+"\n"
+                            app.write=""
+                        }).catch(function (resp) {
+                            console.error("http post err")
+                            console.error(resp)
+                        })
+                    },
+                    getMessage:function () {
+                        let app=this
+                        axios.get("/bot/task").then(function (resp) {
+                            let data=resp.data
+                            if (!data){
+                                return
+                            }
+                            console.log(resp)
+                            if (data.room==app.room){
+                                let msg="【robot】:\n"
+                                if (data.user){
+                                    msg+="@["+data.user+"] "
+                                }
+                                msg+=data.content
+                                app.message+=msg+"\n"
+                            }
+                        }).catch(function (resp) {
+                            console.error(resp)
+                        })
+                    }
+                },
+                mounted:function () {
+                    let p=window.location.href.split("?")[0]
+                    let app=this
+                    axios.get(p+"/me").then(function (resp) {
+                        console.log(resp)
+                        let data=resp.data
+                        app.user=data.user
+                        app.room=data.room
+                        app.timer = setInterval(app.getMessage,500);
+                    }).catch(function (resp) {
+                        console.error("http get err")
+                        console.error(resp)
+                    })
+                },
+                updated:function () {
+                    this.$refs.textarea.scrollTop = this.$refs.textarea.scrollHeight;
+                }
+            })
+        </script>
+    </body>
+</html>
