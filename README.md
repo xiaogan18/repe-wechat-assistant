@@ -3,7 +3,7 @@
 [![Wechaty开源激励计划](https://img.shields.io/badge/Wechaty-开源激励计划-green.svg)](https://github.com/juzibot/Welcome/wiki/Everything-about-Wechaty)
 
 repe is a wechat group assistant,help administrator manage WeChat group.
-## fefeature 
+## feature 
 - sync user and room to service automatically 
 - response WeChat message immediately 
 - support dynamic command configuration 
@@ -12,7 +12,7 @@ repe is a wechat group assistant,help administrator manage WeChat group.
 Writed by golang,is the service apply api for bot
 ### /bot
 Writed by nodejs,is bot self,only do the bot things,all command will be request to service and get response from service.
-### get-start 
+### get-startted
 #### start service 
 <pre>
 cd backend/main
