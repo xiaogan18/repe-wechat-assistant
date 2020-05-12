@@ -14,12 +14,16 @@ Writed by golang,is the service apply api for bot
 Writed by nodejs,is bot self,only do the bot things,all command will be request to service and get response from service.
 ### get-start 
 #### start service 
-` cd backend/main
+<pre>
+cd backend/main
 go build 
-./main `
+./main
+</pre>
 #### start bot
-` cd bot
-npm start `
+<pre>
+cd bot
+npm start
+</pre>
 ### test UI 
 - After start backend service,you can open http://localhost/example/actv with browser,add new activity to a WeChat group or user. The command filed you set,is the way how user join that activity.
 - Also there is a bot simulater at http://localhost:89/example/1 , use it to test when bot can't be setuped. 
