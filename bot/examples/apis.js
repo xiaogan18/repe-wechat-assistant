@@ -1,20 +1,10 @@
 const axios = require("axios");
-const uri="http://129.204.21.76:89/bot"
-// const uri="http://127.0.0.1:89/bot"
+const uri="http://127.0.0.1:89/bot";
+const token=""; // wechaty padplus token
 
+module.exports.token=token
 module.exports.getTask=async function(){
     return axios.get(uri+"/task")
-    // axios.get(uri+"/task").then(function(resp){
-    //     resp=resp.data
-    //     if (resp){
-    //         console.debug("get task > ",resp)
-    //         if (callback){
-    //             callback(resp)
-    //         }
-    //     }
-    // }).catch(function(resp){
-    //     console.error(resp)
-    // })
 }
 module.exports.postCmd=function(user,room,content,mentionList){
     let reqt={

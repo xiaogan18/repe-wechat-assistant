@@ -6,7 +6,7 @@ const {
 }               = require('wechaty')
 const { PuppetPadplus } =require('wechaty-puppet-padplus')
 const apis=require("./apis.js")
-const WECHATY_PUPPET_PADPRO_TOKEN = 'puppet_padplus_898ac68f127f21aa'
+const WECHATY_PUPPET_PADPRO_TOKEN = apis.token
 
 const puppet = new PuppetPadplus({
   token: WECHATY_PUPPET_PADPRO_TOKEN,
